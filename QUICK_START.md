@@ -69,28 +69,36 @@ Wait for all dependencies to install.
    cp .env.example .env
    ```
 
-2. Open `.env` in your favorite editor and fill in:
+2. Open `.env` in your favorite editor and fill in your Auth0 credentials:
 
 ```env
-# From your Machine-to-Machine Application
-AUTH0_DOMAIN=your-tenant.auth0.com
-AUTH0_MANAGEMENT_API_CLIENT_ID=abc123...
-AUTH0_MANAGEMENT_API_CLIENT_SECRET=xyz789...
-AUTH0_MANAGEMENT_API_AUDIENCE=https://your-tenant.auth0.com/api/v2/
+# Server Configuration
+NODE_ENV=development
+PORT=3000
 
-# From your API
-AUTH0_AUDIENCE=https://user-management-api
-AUTH0_ISSUER_BASE_URL=https://your-tenant.auth0.com
+# Auth0 Configuration (from your API in Auth0 Dashboard)
+AUTH0_DOMAIN=your-tenant.auth0.com                    # Your Auth0 tenant domain
+AUTH0_CLIENT_ID=your-client-id                        # Can use same as Management API Client ID
+AUTH0_CLIENT_SECRET=your-client-secret                # Can use same as Management API Client Secret
+AUTH0_AUDIENCE=https://your-api-identifier            # Your API Identifier (e.g., https://user-management-api)
+AUTH0_ISSUER_BASE_URL=https://your-tenant.auth0.com   # Same as AUTH0_DOMAIN with https://
 
-# You can use the same credentials for both if you prefer
-AUTH0_CLIENT_ID=abc123...
-AUTH0_CLIENT_SECRET=xyz789...
+# Auth0 Management API (from your Machine-to-Machine Application)
+AUTH0_MANAGEMENT_API_CLIENT_ID=your-management-api-client-id        # From M2M Application Settings
+AUTH0_MANAGEMENT_API_CLIENT_SECRET=your-management-api-client-secret # From M2M Application Settings
+AUTH0_MANAGEMENT_API_AUDIENCE=https://your-tenant.auth0.com/api/v2/ # Always ends with /api/v2/
 
-# From your Roles
-ROLE_ID_STAFF=rol_xxxxxxxxxxxx
-ROLE_ID_TEACHER=rol_xxxxxxxxxxxx
-ROLE_ID_STUDENT=rol_xxxxxxxxxxxx
+# Role IDs (from Auth0 Dashboard > User Management > Roles)
+ROLE_ID_STAFF=rol_xxxxxxxxxxxxx      # Copy from staff role details
+ROLE_ID_TEACHER=rol_xxxxxxxxxxxxx    # Copy from teacher role details
+ROLE_ID_STUDENT=rol_xxxxxxxxxxxxx    # Copy from student role details
+
+# Upload Configuration (leave as default)
+MAX_FILE_SIZE=5242880
+ALLOWED_FILE_TYPES=text/csv,application/vnd.ms-excel
 ```
+
+**Quick tip:** For simplicity, you can use the same Client ID and Secret for both `AUTH0_CLIENT_ID/SECRET` and `AUTH0_MANAGEMENT_API_CLIENT_ID/SECRET` - just use your Machine-to-Machine application credentials for all of them.
 
 ## Step 4: Start the Server (30 seconds)
 
