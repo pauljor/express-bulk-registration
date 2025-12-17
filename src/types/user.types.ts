@@ -65,6 +65,11 @@ export interface PaginatedUsersResponse {
   total: number;
 }
 
+export interface BulkCreateCriteria {
+  criteria: 'all' | 'role';
+  role?: UserRole;
+}
+
 export interface BulkDeleteCriteria {
   criteria: 'all' | 'role';
   role?: UserRole;

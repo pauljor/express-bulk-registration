@@ -10,7 +10,7 @@ import {
 } from '../controllers/user.controller';
 import { checkJwt, jwtErrorHandler } from '../middlewares/auth.middleware';
 import { upload } from '../middlewares/upload.middleware';
-import { createUserValidation, updateUserValidation, bulkDeleteValidation } from '../utils/validators';
+import { createUserValidation, updateUserValidation, bulkCreateValidation, bulkDeleteValidation } from '../utils/validators';
 
 const router = Router();
 
@@ -29,10 +29,10 @@ router.post('/single/create', createUserValidation, createUser);
 
 /**
  * @route   POST /users/bulk/create
- * @desc    Bulk user registration via CSV upload
+ * @desc    Bulk user registration via CSV upload with criteria filtering
  * @access  Protected
  */
-router.post('/bulk/create', upload.single('file'), bulkCreateUsers);
+router.post('/bulk/create', upload.single('file'), bulkCreateValidation, bulkCreateUsers);
 
 /**
  * @route   POST /users/bulk/delete

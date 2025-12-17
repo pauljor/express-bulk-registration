@@ -7,6 +7,7 @@ import {
   BulkUploadResult,
   CreateUserRequest,
   UserRole,
+  BulkCreateCriteria,
 } from '../types';
 import auth0Service from './auth0.service';
 
@@ -94,7 +95,7 @@ class CSVService {
   /**
    * Process bulk user registration from CSV
    */
-  async processBulkRegistration(filePath: string): Promise<BulkUploadResult> {
+  async processBulkRegistration(filePath: string, criteria?: BulkCreateCriteria): Promise<BulkUploadResult> {
     const startTime = Date.now();
     const result: BulkUploadResult = {
       totalRows: 0,
@@ -127,6 +128,19 @@ class CSVService {
             error: validationError,
           });
           continue;
+        }
+
+        // Apply criteria filtering
+        if (criteria && criteria.criteria === 'role' && criteria.role) {
+          if (row.role.trim() !== criteria.role) {
+            result.failureCount++;
+            result.errors.push({
+              row: rowNumber,
+              email: row.email,
+              error: `Skipped: Role '${row.role}' does not match criteria role '${criteria.role}'`,
+            });
+            continue;
+          }
         }
 
         try {

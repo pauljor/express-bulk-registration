@@ -3,7 +3,7 @@ import { validationResult } from 'express-validator';
 import auth0Service from '../services/auth0.service';
 import csvService from '../services/csv.service';
 import logger from '../utils/logger';
-import { ApiResponse, CreateUserRequest, UpdateUserRequest, BulkDeleteCriteria } from '../types';
+import { ApiResponse, CreateUserRequest, UpdateUserRequest, BulkDeleteCriteria, BulkCreateCriteria } from '../types';
 
 /**
  * @swagger
@@ -361,8 +361,8 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
  *   post:
  *     tags:
  *       - Users
- *     summary: Bulk user registration via CSV
- *     description: Upload a CSV file to register multiple users at once
+ *     summary: Bulk user registration via CSV with criteria filtering
+ *     description: Upload a CSV file to register multiple users at once with optional role filtering
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -373,11 +373,20 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
  *             type: object
  *             required:
  *               - file
+ *               - criteria
  *             properties:
  *               file:
  *                 type: string
  *                 format: binary
  *                 description: CSV file with user data (email, password, role, given_name, family_name, name)
+ *               criteria:
+ *                 type: string
+ *                 enum: [all, role]
+ *                 description: Filter criteria - 'all' to create all users, 'role' to filter by specific role
+ *               role:
+ *                 type: string
+ *                 enum: [staff, teacher, student]
+ *                 description: Required when criteria is 'role' - only users with this role will be created
  *     responses:
  *       200:
  *         description: Bulk upload completed
@@ -391,7 +400,7 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
  *                     data:
  *                       $ref: '#/components/schemas/BulkUploadResult'
  *       400:
- *         description: No file uploaded or invalid file
+ *         description: No file uploaded, invalid file, or validation error
  *       401:
  *         description: Unauthorized
  *       500:
@@ -399,6 +408,16 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
  */
 export const bulkCreateUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    // Validate request
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation failed',
+        errors: errors.array(),
+      });
+    }
+
     if (!req.file) {
       return res.status(400).json({
         success: false,
@@ -408,8 +427,21 @@ export const bulkCreateUsers = async (req: Request, res: Response, next: NextFun
     }
 
     const filePath = req.file.path;
+    const criteria: BulkCreateCriteria = {
+      criteria: req.body.criteria,
+      role: req.body.role,
+    };
 
-    const result = await csvService.processBulkRegistration(filePath);
+    // Validate role criteria
+    if (criteria.criteria === 'role' && !criteria.role) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation failed',
+        message: 'Role is required when criteria is "role"',
+      });
+    }
+
+    const result = await csvService.processBulkRegistration(filePath, criteria);
 
     const response: ApiResponse = {
       success: true,

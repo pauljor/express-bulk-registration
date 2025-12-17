@@ -36,6 +36,18 @@ export const updateUserValidation = [
     .withMessage('Password must be at least 8 characters long'),
 ];
 
+export const bulkCreateValidation = [
+  body('criteria')
+    .trim()
+    .isIn(['all', 'role'])
+    .withMessage('Criteria must be either "all" or "role"'),
+  body('role')
+    .optional()
+    .trim()
+    .isIn(Object.values(UserRole))
+    .withMessage(`Role must be one of: ${Object.values(UserRole).join(', ')}`),
+];
+
 export const bulkDeleteValidation = [
   body('criteria')
     .trim()

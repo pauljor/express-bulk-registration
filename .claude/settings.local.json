@@ -34,7 +34,9 @@
       "Bash(__NEW_LINE__ echo -e \"\\n\\n3. PUT /api/users/{email} (Update user):\")",
       "Bash(__NEW_LINE__ echo -e \"\\n\\n4. DELETE /api/users/{email} (Delete user):\")",
       "Bash(__NEW_LINE__ echo \"1. GET all users:\")",
-      "Bash(__NEW_LINE__ echo \"4. DELETE user:\")"
+      "Bash(__NEW_LINE__ echo \"4. DELETE user:\")",
+      "Bash(chmod:*)",
+      "Bash(findstr:*)"
     ]
   }
 }
