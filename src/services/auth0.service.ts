@@ -33,7 +33,8 @@ class Auth0Service {
         },
       };
 
-      const createdUser: any = await this.managementClient.users.create(auth0User);
+      const result: any = await this.managementClient.users.create(auth0User);
+      const createdUser: any = result.data || result;
 
       // Assign role to user
       await this.assignRoleToUser(createdUser.user_id!, userData.role);
@@ -52,7 +53,11 @@ class Auth0Service {
    */
   async getUserByEmail(email: string): Promise<UserResponse | null> {
     try {
-      const users: any = await this.managementClient.usersByEmail.getByEmail({ email });
+      const response: any = await this.managementClient.usersByEmail.getByEmail({ email });
+
+      // Handle Axios response format
+      const responseData = response.data || response;
+      const users = Array.isArray(responseData) ? responseData : (responseData.users || responseData.data || []);
 
       if (!users || users.length === 0) {
         return null;
@@ -73,7 +78,8 @@ class Auth0Service {
    */
   async getUserById(userId: string): Promise<UserResponse | null> {
     try {
-      const user: any = await this.managementClient.users.get({ id: userId });
+      const result: any = await this.managementClient.users.get({ id: userId });
+      const user: any = result.data || result;
 
       if (!user) {
         return null;
@@ -102,14 +108,19 @@ class Auth0Service {
         include_totals: true,
       });
 
-      const users = result.users.map((user: any) => {
+      // Auth0 v4 SDK returns Axios response with data property
+      const responseData = result.data || result;
+      const usersArray: any[] = responseData.users || responseData.data || [];
+      const total = responseData.total || responseData.length || usersArray.length;
+
+      const users = usersArray.map((user: any) => {
         const role = user.app_metadata?.role || UserRole.STUDENT;
         return this.mapAuth0UserToResponse(user, role);
       });
 
       return {
         users,
-        total: result.total || 0,
+        total,
       };
     } catch (error: any) {
       logger.error('Error fetching users', error);
@@ -146,10 +157,11 @@ class Auth0Service {
         await this.assignRoleToUser(existingUser.user_id, updateData.role);
       }
 
-      const updatedUser: any = await this.managementClient.users.update(
+      const result: any = await this.managementClient.users.update(
         { id: existingUser.user_id },
         updatePayload
       );
+      const updatedUser: any = result.data || result;
 
       const role = updateData.role || existingUser.role;
 

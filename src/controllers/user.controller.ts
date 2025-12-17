@@ -139,6 +139,7 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
         page,
         per_page: perPage,
       },
+      message: 'Users retrieved successfully',
     };
 
     res.json(response);
@@ -202,6 +203,7 @@ export const getUserByEmail = async (req: Request, res: Response, next: NextFunc
     const response: ApiResponse = {
       success: true,
       data: user,
+       message: 'User retrieved successfully',
     };
 
     res.json(response);
@@ -335,6 +337,7 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
 
     const response: ApiResponse = {
       success: true,
+      data: email,
       message: 'User deleted successfully',
     };
 

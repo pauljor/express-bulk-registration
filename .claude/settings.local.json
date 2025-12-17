@@ -11,7 +11,30 @@
       "Bash(curl:*)",
       "Bash(npx ts-node:*)",
       "Bash(json_pp:*)",
-      "Bash(pkill:*)"
+      "Bash(pkill:*)",
+      "Bash(npx tsc:*)",
+      "Bash(TOKEN=\"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InNyWjdKejRRSVFWeUNrTUVlQVNmQyJ9.eyJpc3MiOiJodHRwczovL2Rldi1iMjh6MTN1ejM2Y295ODE1LnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJUSVRHelo2cWZ2eW5td2RQQWk1UDhuTG5ON3U3cjNHRkBjbGllbnRzIiwiYXVkIjoiZXJ1ZGl0aW9uLXVzZXItbWFuYWdlbWVudC1hcGkiLCJpYXQiOjE3NjU5NDE1NTQsImV4cCI6MTc2NjAyNzk1NCwiZ3R5IjoiY2xpZW50LWNyZWRlbnRpYWxzIiwiYXpwIjoiVElUR3paNnFmdnlubXdkUEFpNVA4bkxuTjd1N3IzR0YiLCJwZXJtaXNzaW9ucyI6W119.anJIZTyX_njER7SbnJ7w4NDzKKBALtDAqfJtWGw4TJXtHx29FVdWMvRkr3q9FAwhExF84wMtJZhthqVaJitHVxaz2QON5MchdFzj2jwqySu0daDTZFzAdh4pu-SKcSlhlrcYYa5ydby0yjFAumnHUmD0zQBFjFT4_b_ra-fCiDUOfCqMhn9NnwEbhrRsG8rKoP7wz8LHiOetawXVkGQR5oyOBFPU1HKNs5SwRz4hgjki5faAzVhOk_h4R0B1hg4n4Ey-GfUV8GXdbh8Fs76vvGE7OUuusJ4Y3V31DwMteGpMobgrfj41sX4HkEtMMmV_yyxeEF_HLaXT8JsAAhIIRw\")",
+      "Bash(__NEW_LINE__ echo \"=== Testing GET /api/users ===\")",
+      "Bash(__NEW_LINE__ echo \"1. Testing GET /api/users\")",
+      "Bash(__NEW_LINE__ echo -e \"\\n\\n2. Testing GET /api/users/test@example.com\")",
+      "Bash(__NEW_LINE__ echo -e \"\\n\\n3. Testing PUT /api/users/test@example.com\")",
+      "Bash(__NEW_LINE__ echo -e \"\\n\\n4. Testing DELETE /api/users/test@example.com\")",
+      "Bash(__NEW_LINE__ echo \"=== 1. GET /api/users ===\")",
+      "Bash(__NEW_LINE__ echo \"=== 2. GET /api/users/test@example.com ===\")",
+      "Bash(netstat:*)",
+      "Bash(ss:*)",
+      "Bash(lsof:*)",
+      "Bash(taskkill //F //PID 24744)",
+      "Bash(__NEW_LINE__ echo \"Testing all endpoints...\")",
+      "Bash(xargs:*)",
+      "Bash(echo:*)",
+      "Bash(__NEW_LINE__ echo \"=== Testing All Endpoints ===\")",
+      "Bash(__NEW_LINE__ echo -e \"\\n1. GET /api/users (List all users):\")",
+      "Bash(__NEW_LINE__ echo -e \"\\n2. GET /api/users/{email} (Get user by email):\")",
+      "Bash(__NEW_LINE__ echo -e \"\\n\\n3. PUT /api/users/{email} (Update user):\")",
+      "Bash(__NEW_LINE__ echo -e \"\\n\\n4. DELETE /api/users/{email} (Delete user):\")",
+      "Bash(__NEW_LINE__ echo \"1. GET all users:\")",
+      "Bash(__NEW_LINE__ echo \"4. DELETE user:\")"
     ]
   }
 }
