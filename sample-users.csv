@@ -1,0 +1,6 @@
+email,password,role,given_name,family_name,name
+john.doe@example.com,SecurePass123!,student,John,Doe,John Doe
+jane.smith@example.com,TeacherPass456!,teacher,Jane,Smith,Jane Smith
+admin.user@example.com,AdminPass789!,staff,Admin,User,Admin User
+bob.wilson@example.com,,student,Bob,Wilson,Bob Wilson
+alice.johnson@example.com,,teacher,Alice,Johnson,Alice Johnson
