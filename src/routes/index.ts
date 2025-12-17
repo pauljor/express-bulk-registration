@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import userRoutes from './user.routes';
+import authRoutes from './auth.routes';
 
 const router = Router();
 
@@ -13,6 +14,11 @@ router.get('/health', (_req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+/**
+ * Authentication routes
+ */
+router.use('/auth', authRoutes);
 
 /**
  * User management routes

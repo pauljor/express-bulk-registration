@@ -276,6 +276,26 @@ const swaggerDefinition = {
           },
         },
       },
+      TokenResponse: {
+        type: 'object',
+        properties: {
+          access_token: {
+            type: 'string',
+            description: 'JWT access token',
+            example: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InNyWjdKejRRSVFWeUNrTUVlQVNmQyJ9...',
+          },
+          token_type: {
+            type: 'string',
+            description: 'Token type (always Bearer)',
+            example: 'Bearer',
+          },
+          expires_in: {
+            type: 'integer',
+            description: 'Token expiration time in seconds',
+            example: 86400,
+          },
+        },
+      },
       ApiResponse: {
         type: 'object',
         properties: {
