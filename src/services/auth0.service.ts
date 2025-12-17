@@ -1,7 +1,14 @@
 import { ManagementClient } from 'auth0';
 import config from '../config/config';
 import logger from '../utils/logger';
-import { CreateUserRequest, UpdateUserRequest, UserResponse, UserRole } from '../types';
+import {
+  CreateUserRequest,
+  UpdateUserRequest,
+  UserResponse,
+  UserRole,
+  BulkDeleteCriteria,
+  BulkDeleteResult,
+} from '../types';
 
 class Auth0Service {
   private managementClient: ManagementClient;
@@ -192,6 +199,95 @@ class Auth0Service {
       logger.error(`Error deleting user: ${email}`, error);
       throw new Error(error.message || 'Failed to delete user');
     }
+  }
+
+  /**
+   * Delete users by criteria (all or by role)
+   */
+  async deleteUsersByCriteria(criteria: BulkDeleteCriteria): Promise<BulkDeleteResult> {
+    const result: BulkDeleteResult = {
+      totalUsers: 0,
+      deletedCount: 0,
+      failedCount: 0,
+      failures: [],
+    };
+
+    try {
+      // Fetch users based on criteria
+      let usersToDelete: UserResponse[] = [];
+
+      if (criteria.criteria === 'all') {
+        usersToDelete = await this.getAllUsersForDeletion();
+      } else if (criteria.criteria === 'role' && criteria.role) {
+        const allUsers = await this.getAllUsersForDeletion();
+        usersToDelete = allUsers.filter((user) => user.role === criteria.role);
+      }
+
+      result.totalUsers = usersToDelete.length;
+
+      if (usersToDelete.length === 0) {
+        logger.info('No users found matching criteria for deletion');
+        return result;
+      }
+
+      logger.info(`Starting bulk delete: ${usersToDelete.length} users`);
+
+      // Delete users one by one
+      for (let i = 0; i < usersToDelete.length; i++) {
+        const user = usersToDelete[i];
+
+        try {
+          await this.managementClient.users.delete({ id: user.user_id });
+          result.deletedCount++;
+          logger.debug(`User deleted: ${user.email}`);
+        } catch (error: any) {
+          result.failedCount++;
+          result.failures.push({
+            email: user.email,
+            user_id: user.user_id,
+            error: error.message || 'Failed to delete user',
+          });
+          logger.error(`Failed to delete user: ${user.email}`, error);
+        }
+
+        // Rate limiting: delay every 10 deletions
+        if (i > 0 && i % 10 === 0) {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+        }
+      }
+
+      logger.info(
+        `Bulk delete completed: ${result.deletedCount} deleted, ${result.failedCount} failed`
+      );
+
+      return result;
+    } catch (error: any) {
+      logger.error('Error in bulk delete operation', error);
+      throw new Error(error.message || 'Failed to perform bulk delete');
+    }
+  }
+
+  /**
+   * Get all users for deletion (handles pagination internally)
+   */
+  private async getAllUsersForDeletion(): Promise<UserResponse[]> {
+    const allUsers: UserResponse[] = [];
+    let page = 0;
+    const perPage = 100;
+    let hasMore = true;
+
+    while (hasMore) {
+      const result = await this.getUsers(page, perPage);
+      allUsers.push(...result.users);
+
+      if (allUsers.length >= result.total) {
+        hasMore = false;
+      } else {
+        page++;
+      }
+    }
+
+    return allUsers;
   }
 
   /**

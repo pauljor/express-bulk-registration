@@ -3,7 +3,7 @@ import { validationResult } from 'express-validator';
 import auth0Service from '../services/auth0.service';
 import csvService from '../services/csv.service';
 import logger from '../utils/logger';
-import { ApiResponse, CreateUserRequest, UpdateUserRequest } from '../types';
+import { ApiResponse, CreateUserRequest, UpdateUserRequest, BulkDeleteCriteria } from '../types';
 
 /**
  * @swagger
@@ -420,6 +420,100 @@ export const bulkCreateUsers = async (req: Request, res: Response, next: NextFun
     res.json(response);
   } catch (error: any) {
     logger.error('Error in bulkCreateUsers controller', error);
+    next(error);
+  }
+};
+
+/**
+ * @swagger
+ * /api/users/bulk-delete:
+ *   post:
+ *     tags:
+ *       - Users
+ *     summary: Bulk delete users by criteria
+ *     description: Delete multiple users based on criteria (all users or by role)
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/BulkDeleteCriteria'
+ *     responses:
+ *       200:
+ *         description: Bulk delete completed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/ApiResponse'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       $ref: '#/components/schemas/BulkDeleteResult'
+ *       400:
+ *         description: Invalid criteria or missing confirmation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiError'
+ */
+export const bulkDeleteUsers = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const criteria: BulkDeleteCriteria = req.body;
+
+    // Validate request
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation failed',
+        errors: errors.array(),
+      });
+    }
+
+    // Safety check for deleting all users
+    if (criteria.criteria === 'all' && criteria.confirm !== true) {
+      return res.status(400).json({
+        success: false,
+        error: 'Confirmation Required',
+        message: 'Deleting all users requires explicit confirmation. Set "confirm: true" in request body.',
+      });
+    }
+
+    // Validate role criteria
+    if (criteria.criteria === 'role' && !criteria.role) {
+      return res.status(400).json({
+        success: false,
+        error: 'Validation failed',
+        message: 'Role is required when criteria is "role"',
+      });
+    }
+
+    const result = await auth0Service.deleteUsersByCriteria(criteria);
+
+    const response: ApiResponse = {
+      success: true,
+      data: result,
+      message: `Bulk delete completed: ${result.deletedCount} users deleted, ${result.failedCount} failed`,
+    };
+
+    res.json(response);
+  } catch (error: any) {
+    logger.error('Error in bulkDeleteUsers controller', error);
     next(error);
   }
 };

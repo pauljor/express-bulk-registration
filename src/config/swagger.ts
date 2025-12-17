@@ -187,6 +187,71 @@ const swaggerDefinition = {
           },
         },
       },
+      BulkDeleteCriteria: {
+        type: 'object',
+        required: ['criteria'],
+        properties: {
+          criteria: {
+            type: 'string',
+            enum: ['all', 'role'],
+            description: 'Criteria for bulk deletion',
+            example: 'role',
+          },
+          role: {
+            $ref: '#/components/schemas/UserRole',
+            description: 'Required when criteria is "role"',
+          },
+          confirm: {
+            type: 'boolean',
+            description: 'Required to be true when deleting all users',
+            example: true,
+          },
+        },
+      },
+      BulkDeleteFailure: {
+        type: 'object',
+        properties: {
+          email: {
+            type: 'string',
+            example: 'user@example.com',
+          },
+          user_id: {
+            type: 'string',
+            example: 'auth0|507f1f77bcf86cd799439011',
+          },
+          error: {
+            type: 'string',
+            example: 'Failed to delete user',
+          },
+        },
+      },
+      BulkDeleteResult: {
+        type: 'object',
+        properties: {
+          totalUsers: {
+            type: 'integer',
+            example: 50,
+            description: 'Total number of users matching criteria',
+          },
+          deletedCount: {
+            type: 'integer',
+            example: 48,
+            description: 'Number of users successfully deleted',
+          },
+          failedCount: {
+            type: 'integer',
+            example: 2,
+            description: 'Number of users that failed to delete',
+          },
+          failures: {
+            type: 'array',
+            items: {
+              $ref: '#/components/schemas/BulkDeleteFailure',
+            },
+            description: 'List of failed deletions with details',
+          },
+        },
+      },
       ApiResponse: {
         type: 'object',
         properties: {

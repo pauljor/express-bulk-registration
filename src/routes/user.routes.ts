@@ -6,10 +6,11 @@ import {
   updateUser,
   deleteUser,
   bulkCreateUsers,
+  bulkDeleteUsers,
 } from '../controllers/user.controller';
 import { checkJwt, jwtErrorHandler } from '../middlewares/auth.middleware';
 import { upload } from '../middlewares/upload.middleware';
-import { createUserValidation, updateUserValidation } from '../utils/validators';
+import { createUserValidation, updateUserValidation, bulkDeleteValidation } from '../utils/validators';
 
 const router = Router();
 
@@ -32,6 +33,13 @@ router.post('/', createUserValidation, createUser);
  * @access  Protected
  */
 router.post('/bulk', upload.single('file'), bulkCreateUsers);
+
+/**
+ * @route   POST /api/users/bulk-delete
+ * @desc    Bulk delete users by criteria
+ * @access  Protected
+ */
+router.post('/bulk-delete', bulkDeleteValidation, bulkDeleteUsers);
 
 /**
  * @route   GET /api/users

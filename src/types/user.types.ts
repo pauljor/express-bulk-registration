@@ -62,3 +62,22 @@ export interface PaginatedUsersResponse {
   limit: number;
   total: number;
 }
+
+export interface BulkDeleteCriteria {
+  criteria: 'all' | 'role';
+  role?: UserRole;
+  confirm?: boolean;
+}
+
+export interface BulkDeleteFailure {
+  email: string;
+  user_id: string;
+  error: string;
+}
+
+export interface BulkDeleteResult {
+  totalUsers: number;
+  deletedCount: number;
+  failedCount: number;
+  failures: BulkDeleteFailure[];
+}
