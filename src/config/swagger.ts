@@ -153,20 +153,34 @@ const swaggerDefinition = {
           totalRows: {
             type: 'integer',
             example: 100,
+            description: 'Total number of rows in CSV file',
           },
           successCount: {
             type: 'integer',
             example: 95,
+            description: 'Number of users successfully created',
           },
           failureCount: {
             type: 'integer',
             example: 5,
+            description: 'Number of users that failed to create',
           },
           errors: {
             type: 'array',
             items: {
               $ref: '#/components/schemas/BulkUploadError',
             },
+            description: 'List of failed user creations with details',
+          },
+          processedTime: {
+            type: 'integer',
+            example: 15420,
+            description: 'Total processing time in milliseconds',
+          },
+          processedTimeFormatted: {
+            type: 'string',
+            example: '15.4 seconds',
+            description: 'Human-readable processing time (e.g., "2.5 seconds", "3 minutes 15 seconds", "1 hour 30 minutes")',
           },
         },
       },
@@ -249,6 +263,16 @@ const swaggerDefinition = {
               $ref: '#/components/schemas/BulkDeleteFailure',
             },
             description: 'List of failed deletions with details',
+          },
+          processedTime: {
+            type: 'integer',
+            example: 8750,
+            description: 'Total processing time in milliseconds',
+          },
+          processedTimeFormatted: {
+            type: 'string',
+            example: '8.8 seconds',
+            description: 'Human-readable processing time (e.g., "2.5 seconds", "3 minutes 15 seconds", "1 hour 30 minutes")',
           },
         },
       },

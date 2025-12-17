@@ -1,6 +1,7 @@
 import { ManagementClient } from 'auth0';
 import config from '../config/config';
 import logger from '../utils/logger';
+import { formatProcessingTime } from '../utils/time';
 import {
   CreateUserRequest,
   UpdateUserRequest,
@@ -205,11 +206,14 @@ class Auth0Service {
    * Delete users by criteria (all or by role)
    */
   async deleteUsersByCriteria(criteria: BulkDeleteCriteria): Promise<BulkDeleteResult> {
+    const startTime = Date.now();
     const result: BulkDeleteResult = {
       totalUsers: 0,
       deletedCount: 0,
       failedCount: 0,
       failures: [],
+      processedTime: 0,
+      processedTimeFormatted: '',
     };
 
     try {
@@ -227,6 +231,8 @@ class Auth0Service {
 
       if (usersToDelete.length === 0) {
         logger.info('No users found matching criteria for deletion');
+        result.processedTime = Date.now() - startTime;
+        result.processedTimeFormatted = formatProcessingTime(result.processedTime);
         return result;
       }
 
@@ -260,9 +266,13 @@ class Auth0Service {
         `Bulk delete completed: ${result.deletedCount} deleted, ${result.failedCount} failed`
       );
 
+      result.processedTime = Date.now() - startTime;
+      result.processedTimeFormatted = formatProcessingTime(result.processedTime);
       return result;
     } catch (error: any) {
       logger.error('Error in bulk delete operation', error);
+      result.processedTime = Date.now() - startTime;
+      result.processedTimeFormatted = formatProcessingTime(result.processedTime);
       throw new Error(error.message || 'Failed to perform bulk delete');
     }
   }

@@ -39,6 +39,8 @@ export interface BulkUploadResult {
   successCount: number;
   failureCount: number;
   errors: BulkUploadError[];
+  processedTime: number;
+  processedTimeFormatted: string;
 }
 
 export interface BulkUploadError {
@@ -80,4 +82,6 @@ export interface BulkDeleteResult {
   deletedCount: number;
   failedCount: number;
   failures: BulkDeleteFailure[];
+  processedTime: number;
+  processedTimeFormatted: string;
 }

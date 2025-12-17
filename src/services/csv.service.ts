@@ -1,6 +1,7 @@
 import fs from 'fs';
 import csvParser from 'csv-parser';
 import logger from '../utils/logger';
+import { formatProcessingTime } from '../utils/time';
 import {
   CSVUserRow,
   BulkUploadResult,
@@ -94,11 +95,14 @@ class CSVService {
    * Process bulk user registration from CSV
    */
   async processBulkRegistration(filePath: string): Promise<BulkUploadResult> {
+    const startTime = Date.now();
     const result: BulkUploadResult = {
       totalRows: 0,
       successCount: 0,
       failureCount: 0,
       errors: [],
+      processedTime: 0,
+      processedTimeFormatted: '',
     };
 
     try {
@@ -164,9 +168,13 @@ class CSVService {
         `Bulk registration completed: ${result.successCount} succeeded, ${result.failureCount} failed`
       );
 
+      result.processedTime = Date.now() - startTime;
+      result.processedTimeFormatted = formatProcessingTime(result.processedTime);
       return result;
     } catch (error: any) {
       logger.error('Error processing CSV file', error);
+      result.processedTime = Date.now() - startTime;
+      result.processedTimeFormatted = formatProcessingTime(result.processedTime);
       throw new Error('Failed to process CSV file: ' + error.message);
     } finally {
       // Clean up: delete the uploaded file
