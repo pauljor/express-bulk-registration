@@ -56,7 +56,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
 /**
  * Routes
  */
-app.use('/api', routes);
+app.use('/', routes);
 
 /**
  * Root endpoint

@@ -21,52 +21,52 @@ router.use(checkJwt);
 router.use(jwtErrorHandler);
 
 /**
- * @route   POST /api/users
+ * @route   POST /users/single/create
  * @desc    Create a new user
  * @access  Protected
  */
-router.post('/', createUserValidation, createUser);
+router.post('/single/create', createUserValidation, createUser);
 
 /**
- * @route   POST /api/users/bulk
+ * @route   POST /users/bulk/create
  * @desc    Bulk user registration via CSV upload
  * @access  Protected
  */
-router.post('/bulk', upload.single('file'), bulkCreateUsers);
+router.post('/bulk/create', upload.single('file'), bulkCreateUsers);
 
 /**
- * @route   POST /api/users/bulk-delete
+ * @route   POST /users/bulk/delete
  * @desc    Bulk delete users by criteria
  * @access  Protected
  */
-router.post('/bulk-delete', bulkDeleteValidation, bulkDeleteUsers);
+router.post('/bulk/delete', bulkDeleteValidation, bulkDeleteUsers);
 
 /**
- * @route   GET /api/users
+ * @route   GET /users/all/fetch
  * @desc    Get all users with pagination
  * @access  Protected
  */
-router.get('/', getUsers);
+router.get('/all/fetch', getUsers);
 
 /**
- * @route   GET /api/users/:email
+ * @route   GET /users/:email/fetch
  * @desc    Get user by email
  * @access  Protected
  */
-router.get('/:email', getUserByEmail);
+router.get('/:email/fetch', getUserByEmail);
 
 /**
- * @route   PUT /api/users/:email
+ * @route   PUT /users/:email/update
  * @desc    Update user by email
  * @access  Protected
  */
-router.put('/:email', updateUserValidation, updateUser);
+router.put('/:email/update', updateUserValidation, updateUser);
 
 /**
- * @route   DELETE /api/users/:email
+ * @route   DELETE /users/:email/delete
  * @desc    Delete user by email
  * @access  Protected
  */
-router.delete('/:email', deleteUser);
+router.delete('/:email/delete', deleteUser);
 
 export default router;

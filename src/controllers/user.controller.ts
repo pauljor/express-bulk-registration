@@ -7,7 +7,7 @@ import { ApiResponse, CreateUserRequest, UpdateUserRequest, BulkDeleteCriteria }
 
 /**
  * @swagger
- * /api/users:
+ * /users/single/create:
  *   post:
  *     tags:
  *       - Users
@@ -75,7 +75,7 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
 
 /**
  * @swagger
- * /api/users:
+ * /users/all/fetch:
  *   get:
  *     tags:
  *       - Users
@@ -151,7 +151,7 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
 
 /**
  * @swagger
- * /api/users/{email}:
+ * /users/{email}/fetch:
  *   get:
  *     tags:
  *       - Users
@@ -215,7 +215,7 @@ export const getUserByEmail = async (req: Request, res: Response, next: NextFunc
 
 /**
  * @swagger
- * /api/users/{email}:
+ * /users/{email}/update:
  *   put:
  *     tags:
  *       - Users
@@ -299,7 +299,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
 
 /**
  * @swagger
- * /api/users/{email}:
+ * /users/{email}/delete:
  *   delete:
  *     tags:
  *       - Users
@@ -357,7 +357,7 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
 
 /**
  * @swagger
- * /api/users/bulk:
+ * /users/bulk/create:
  *   post:
  *     tags:
  *       - Users
@@ -426,7 +426,7 @@ export const bulkCreateUsers = async (req: Request, res: Response, next: NextFun
 
 /**
  * @swagger
- * /api/users/bulk-delete:
+ * /users/bulk/delete:
  *   post:
  *     tags:
  *       - Users

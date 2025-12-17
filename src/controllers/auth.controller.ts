@@ -5,7 +5,7 @@ import { ApiResponse } from '../types';
 
 /**
  * @swagger
- * /api/auth/token:
+ * /auth/token:
  *   post:
  *     tags:
  *       - Authentication
