@@ -10,7 +10,8 @@
       "Bash(npx nodemon:*)",
       "Bash(curl:*)",
       "Bash(npx ts-node:*)",
-      "Bash(json_pp:*)"
+      "Bash(json_pp:*)",
+      "Bash(pkill:*)"
     ]
   }
 }

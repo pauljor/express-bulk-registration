@@ -45,9 +45,12 @@ if (config.nodeEnv === 'development') {
  * API Documentation
  */
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
-  explorer: true,
+  // explorer: true,
   customCss: '.swagger-ui .topbar { display: none }',
   customSiteTitle: 'Express Auth0 API Docs',
+  swaggerOptions: {
+    persistAuthorization: true,
+  },
 }));
 
 /**
