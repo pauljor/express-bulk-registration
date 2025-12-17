@@ -11,9 +11,9 @@ const server = app.listen(PORT, () => {
     ║  Express Auth0 User Management API                        ║
     ║                                                           ║
     ║  Server is running on port ${PORT}                           ║
-    ║  Environment: ${config.nodeEnv}                              ║
+    ║  Environment: ${config.nodeEnv}                                 ║
     ║                                                           ║
-    ║  API Documentation: http://localhost:${PORT}/api-docs        ║
+    ║  API Documentation: http://localhost:${PORT}/docs            ║
     ║  Health Check: http://localhost:${PORT}/api/health           ║
     ║                                                           ║
     ╚═══════════════════════════════════════════════════════════╝

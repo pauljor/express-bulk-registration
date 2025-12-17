@@ -1,7 +1,16 @@
 {
   "permissions": {
     "allow": [
-      "Bash(bash:*)"
+      "Bash(bash:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run dev:*)",
+      "Bash(cat:*)",
+      "Bash(npm run type-check:*)",
+      "Bash(ls:*)",
+      "Bash(npx nodemon:*)",
+      "Bash(curl:*)",
+      "Bash(npx ts-node:*)",
+      "Bash(json_pp:*)"
     ]
   }
 }

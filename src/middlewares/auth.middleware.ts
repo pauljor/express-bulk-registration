@@ -78,7 +78,7 @@ export const optionalJwt = expressjwt({
  */
 export const jwtErrorHandler = (
   err: any,
-  req: Request,
+  _req: Request,
   res: Response,
   next: NextFunction
 ) => {

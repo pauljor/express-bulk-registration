@@ -1,4 +1,4 @@
-import { ManagementClient, User, Role } from 'auth0';
+import { ManagementClient } from 'auth0';
 import config from '../config/config';
 import logger from '../utils/logger';
 import { CreateUserRequest, UpdateUserRequest, UserResponse, UserRole } from '../types';
@@ -20,7 +20,7 @@ class Auth0Service {
    */
   async createUser(userData: CreateUserRequest): Promise<UserResponse> {
     try {
-      const auth0User: User = {
+      const auth0User: any = {
         email: userData.email,
         password: userData.password,
         connection: 'Username-Password-Authentication',
@@ -33,7 +33,7 @@ class Auth0Service {
         },
       };
 
-      const createdUser = await this.managementClient.users.create(auth0User);
+      const createdUser: any = await this.managementClient.users.create(auth0User);
 
       // Assign role to user
       await this.assignRoleToUser(createdUser.user_id!, userData.role);
@@ -52,7 +52,7 @@ class Auth0Service {
    */
   async getUserByEmail(email: string): Promise<UserResponse | null> {
     try {
-      const users = await this.managementClient.users.getByEmail(email);
+      const users: any = await this.managementClient.usersByEmail.getByEmail({ email });
 
       if (!users || users.length === 0) {
         return null;
@@ -73,7 +73,7 @@ class Auth0Service {
    */
   async getUserById(userId: string): Promise<UserResponse | null> {
     try {
-      const user = await this.managementClient.users.get({ id: userId });
+      const user: any = await this.managementClient.users.get({ id: userId });
 
       if (!user) {
         return null;
@@ -96,13 +96,13 @@ class Auth0Service {
    */
   async getUsers(page = 0, perPage = 50): Promise<{ users: UserResponse[]; total: number }> {
     try {
-      const result = await this.managementClient.users.getAll({
+      const result: any = await this.managementClient.users.getAll({
         page,
         per_page: perPage,
         include_totals: true,
       });
 
-      const users = result.users.map((user) => {
+      const users = result.users.map((user: any) => {
         const role = user.app_metadata?.role || UserRole.STUDENT;
         return this.mapAuth0UserToResponse(user, role);
       });
@@ -146,7 +146,7 @@ class Auth0Service {
         await this.assignRoleToUser(existingUser.user_id, updateData.role);
       }
 
-      const updatedUser = await this.managementClient.users.update(
+      const updatedUser: any = await this.managementClient.users.update(
         { id: existingUser.user_id },
         updatePayload
       );
@@ -225,7 +225,7 @@ class Auth0Service {
   /**
    * Map Auth0 user to our UserResponse format
    */
-  private mapAuth0UserToResponse(user: User, role: UserRole): UserResponse {
+  private mapAuth0UserToResponse(user: any, role: UserRole): UserResponse {
     return {
       user_id: user.user_id!,
       email: user.email!,

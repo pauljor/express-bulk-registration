@@ -4,7 +4,6 @@ import logger from '../utils/logger';
 import {
   CSVUserRow,
   BulkUploadResult,
-  BulkUploadError,
   CreateUserRequest,
   UserRole,
 } from '../types';
@@ -35,7 +34,7 @@ class CSVService {
   /**
    * Validate a CSV row
    */
-  validateRow(row: CSVUserRow, rowIndex: number): string | null {
+  validateRow(row: CSVUserRow, _rowIndex: number): string | null {
     // Check required fields
     if (!row.email || !row.email.trim()) {
       return 'Email is required';

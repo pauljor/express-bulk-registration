@@ -35,15 +35,15 @@ const config: Config = {
   port: parseInt(process.env.PORT || '3000', 10),
   nodeEnv: process.env.NODE_ENV || 'development',
   auth0: {
-    domain: process.env.AUTH0_DOMAIN,
-    clientId: process.env.AUTH0_CLIENT_ID,
-    clientSecret: process.env.AUTH0_CLIENT_SECRET,
-    audience: process.env.AUTH0_AUDIENCE,
-    issuerBaseUrl: process.env.AUTH0_ISSUER_BASE_URL,
+    domain: process.env.AUTH0_DOMAIN || '',
+    clientId: process.env.AUTH0_CLIENT_ID || '',
+    clientSecret: process.env.AUTH0_CLIENT_SECRET || '',
+    audience: process.env.AUTH0_AUDIENCE || '',
+    issuerBaseUrl: process.env.AUTH0_ISSUER_BASE_URL || '',
     managementApi: {
-      clientId: process.env.AUTH0_MANAGEMENT_API_CLIENT_ID,
-      clientSecret: process.env.AUTH0_MANAGEMENT_API_CLIENT_SECRET,
-      audience: process.env.AUTH0_MANAGEMENT_API_AUDIENCE,
+      clientId: process.env.AUTH0_MANAGEMENT_API_CLIENT_ID || '',
+      clientSecret: process.env.AUTH0_MANAGEMENT_API_CLIENT_SECRET || '',
+      audience: process.env.AUTH0_MANAGEMENT_API_AUDIENCE || '',
     },
     roles: {
       staff: process.env.ROLE_ID_STAFF || '',

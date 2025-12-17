@@ -9,7 +9,7 @@ export const errorHandler = (
   err: any,
   req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ) => {
   // Log the error
   logger.error('Error occurred:', {

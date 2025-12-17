@@ -44,7 +44,7 @@ if (config.nodeEnv === 'development') {
 /**
  * API Documentation
  */
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   explorer: true,
   customCss: '.swagger-ui .topbar { display: none }',
   customSiteTitle: 'Express Auth0 API Docs',
@@ -58,11 +58,11 @@ app.use('/api', routes);
 /**
  * Root endpoint
  */
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
   res.json({
     message: 'Express Auth0 User Management API',
     version: '1.0.0',
-    documentation: '/api-docs',
+    documentation: '/docs',
     health: '/api/health',
   });
 });
