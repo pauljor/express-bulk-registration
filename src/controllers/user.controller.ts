@@ -374,6 +374,7 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
  *             required:
  *               - file
  *               - criteria
+ *               - role
  *             properties:
  *               file:
  *                 type: string
