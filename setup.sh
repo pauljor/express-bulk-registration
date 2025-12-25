@@ -38,7 +38,7 @@ cat > tsconfig.json << 'EOF'
     "sourceMap": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitReturns": true,
+    "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src/**/*"],
@@ -63,19 +63,19 @@ echo "📝 Creating .env.example..."
 cat > .env.example << 'EOF'
 # Server Configuration
 NODE_ENV=development
-PORT=3000
+PORT=5000
 
 # Auth0 Configuration
-AUTH0_DOMAIN=your-tenant.auth0.com
-AUTH0_CLIENT_ID=your-client-id
-AUTH0_CLIENT_SECRET=your-client-secret
-AUTH0_AUDIENCE=https://your-tenant.auth0.com/api/v2/
-AUTH0_ISSUER_BASE_URL=https://your-tenant.auth0.com
+AUTH0_DOMAIN=your-tenant.auth0.com                      # Your Auth0 tenant domain
+AUTH0_CLIENT_ID=your-client-id                          # Can use same as Management API Client ID
+AUTH0_CLIENT_SECRET=your-client-secret                  # Can use same as Management API Client Secret
+AUTH0_AUDIENCE=https://your-tenant.auth0.com/api/v2/    # Your API Identifier (e.g., https://user-management-api)
+AUTH0_ISSUER_BASE_URL=https://AUTH0-DOMAIN              # Same as AUTH0_DOMAIN with https:// prefix
 
 # Auth0 Management API
-AUTH0_MANAGEMENT_API_CLIENT_ID=your-management-api-client-id
-AUTH0_MANAGEMENT_API_CLIENT_SECRET=your-management-api-client-secret
-AUTH0_MANAGEMENT_API_AUDIENCE=https://your-tenant.auth0.com/api/v2/
+AUTH0_MANAGEMENT_API_CLIENT_ID=AUTH0_CLIENT_ID                          # From M2M Application Settings
+AUTH0_MANAGEMENT_API_CLIENT_SECRET=AUTH0_CLIENT_SECRET                  # From M2M Application Settings
+AUTH0_MANAGEMENT_API_AUDIENCE=https://AUTH0-DOMAIN/api/v2/              # Always ends with /api/v2/
 
 # Role IDs (get these from Auth0 Dashboard)
 ROLE_ID_STAFF=rol_xxxxxxxxxxxxx
@@ -169,26 +169,31 @@ EOF
 
 # Update package.json scripts
 echo "📜 Updating package.json scripts..."
-node -e "
+node << 'EOF'
 const fs = require('fs');
-const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-pkg.scripts = {
-  'dev': 'nodemon --exec ts-node src/server.ts',
-  'build': 'tsc',
-  'start': 'node dist/server.js',
-  'type-check': 'tsc --noEmit',
-  'lint': 'eslint . --ext .ts',
-  'format': 'prettier --write \"src/**/*.ts\"'
-};
-pkg.name = 'express-auth0-mvp';
-pkg.version = '1.0.0';
-pkg.description = 'Express + TypeScript + Auth0 MVP for user registration and management';
-pkg.main = 'dist/server.js';
-pkg.author = '';
-pkg.license = 'ISC';
-fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2));
-"
 
+const pkgPath = 'package.json';
+const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+
+pkg.scripts = {
+  dev: "npx nodemon --exec ts-node src/server.ts",
+  build: "npx tsc",
+  start: "node dist/server.js",
+  "type-check": "npx tsc --noEmit",
+  lint: "npx eslint . --ext .ts",
+  format: "npx prettier --write \"src/**/*.ts\""
+};
+
+pkg.name = "express-auth0-mvp";
+pkg.version = "1.0.0";
+pkg.description = "Express + TypeScript + Auth0 MVP for user registration and management";
+pkg.main = "dist/server.js";
+pkg.license = "ISC";
+
+fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
+EOF
+
+# Final message
 echo ""
 echo "✅ Setup complete!"
 echo ""

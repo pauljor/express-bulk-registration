@@ -15,7 +15,7 @@
   "license": "ISC",
   "description": "Express + TypeScript + Auth0 MVP for user registration and management",
   "dependencies": {
-    "auth0": "^4.7.0",
+    "auth0": "^4.37.0",
     "cors": "^2.8.5",
     "csv-parser": "^3.2.0",
     "dotenv": "^17.2.3",
